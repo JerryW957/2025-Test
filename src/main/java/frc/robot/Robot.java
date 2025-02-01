@@ -75,10 +75,12 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     if (xbox.getRightBumperButtonPressed()){
+      stopAllMotors();
       count++;
     }
 
     if (xbox.getLeftBumperButtonPressed()){
+      stopAllMotors();
       count--;
     }
 
@@ -92,68 +94,56 @@ public class Robot extends TimedRobot {
     
     switch (count) {
       case 0:
-      stopAllMotors();
       driveTopRight.setVoltage(4);
       break;
 
       case 1:
-      stopAllMotors();
       steerTopRight.setVoltage(4);
       break;
 
       case 2:
-      stopAllMotors();
       driveTopLeft.setVoltage(4);
       break;
 
       case 3:
-      stopAllMotors();
       steerTopLeft.setVoltage(4);
       break;
 
       case 4:
-      stopAllMotors();
       driveBottomRight.setVoltage(4);
       break;
 
       case 5:
-      stopAllMotors();
       steerBottomRight.setVoltage(4);
       break;
 
       case 6:
-      stopAllMotors();
       driveBottomLeft.setVoltage(4);
       break;
 
       case 7:
-      stopAllMotors();
       steerBottomLeft.setVoltage(4);
       break;
 
       case 8:
-      stopAllMotors();
       pivot.setVoltage(4);
       break;
 
       case 9:
-      stopAllMotors();
       claw.setVoltage(4);
       break;
 
       case 10:
-      stopAllMotors();
       climber.setVoltage(4);
       break;
 
       case 11:
-      stopAllMotors();
       spare.setVoltage(4);
       break;
 
       case 12:
-      stopAllMotors();
       elevator.setVoltage(4);
+      break;
     } 
   }
 
