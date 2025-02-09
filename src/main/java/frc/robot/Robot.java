@@ -186,12 +186,14 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     double kG = 0.5;
     double appliedVoltage = kG;
+    //appliedVoltage = (kG * wristEncoder.getPosition()) - kG calculation for wrist
 
     if(xbox.getAButton()){
       appliedVoltage = kG + 0.5;
+      // appliedVoltage = (kG * wristEncoder.getPosition()) + 0.5; - this is the equation for the wrist
     }
 
-    wrist.setVoltage(appliedVoltage);
+    elevator.setVoltage(appliedVoltage);
   }
 
   @Override
