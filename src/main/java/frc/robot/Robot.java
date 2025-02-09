@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("Wrist Encoder", wristEncoder.getPosition());
     SmartDashboard.putBoolean("Elevator Limit Switch", elevatorLimitSwitch.get());
-    SmartDashboard.putNumber("Intake Sensor", intakeTOF.getRange());
+    SmartDashboard.putNumber("Intake TOF", intakeTOF.getRange());
     SmartDashboard.putNumber("Elevator Encoder", elevator.getPosition().getValueAsDouble());
   }
 
