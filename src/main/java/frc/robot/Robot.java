@@ -5,11 +5,15 @@
 package frc.robot;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.spark.SparkMax;
+import com.playingwithfusion.TimeOfFlight;
+import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -33,12 +37,19 @@ public class Robot extends TimedRobot {
   SparkMax intake;
   SparkMax climber;
   TalonFX elevator;
+  Canandmag wristEncoder;
+  DigitalInput elevatorLimitSwitch;
+  TimeOfFlight intakeSensor;
 
   XboxController xbox;
   
   int count;
 
+  // TELEOP - a case to run each motor individually
+  // TEST - designed to determine kG values
+
   public Robot() {
+    // DRIVETRAIN MOTORS
     driveFrontLeft = new SparkMax(1, MotorType.kBrushless);
     steerFrontLeft = new SparkMax(2, MotorType.kBrushless);
 
@@ -51,19 +62,32 @@ public class Robot extends TimedRobot {
     driveBackRight = new SparkMax(7, MotorType.kBrushless);
     steerBackRight = new SparkMax(8, MotorType.kBrushless);
 
+    // MECHANISM MOTORS
     wrist = new TalonFX(9);
     intake = new SparkMax(10, MotorType.kBrushless);
     climber = new SparkMax(11, MotorType.kBrushless);
     elevator = new TalonFX(13);
 
+    wristEncoder = new Canandmag(12);
+    elevatorLimitSwitch = new DigitalInput(0);
+    intakeSensor = new TimeOfFlight(1);
+
+    // CONTROLLER
     xbox = new XboxController(0);
 
+    // GLOBAL VARIABLES
     count = 0;
 
   }
 
   @Override
-  public void robotPeriodic() {}
+  // Dashboard sensor values
+  public void robotPeriodic() {
+    SmartDashboard.putNumber("Wrist Encoder", wristEncoder.getPosition());
+    SmartDashboard.putBoolean("Elevator Limit Switch", elevatorLimitSwitch.get());
+    SmartDashboard.putNumber("Intake Sensor", intakeSensor.getRange());
+    SmartDashboard.putNumber("Elevator Encoder", elevator.getPosition().getValueAsDouble());
+  }
 
   @Override
   public void autonomousInit() {}
@@ -152,10 +176,21 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   @Override
-  public void testInit() {}
+  public void testInit() {
+
+  }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    double kG = 0.5;
+    double appliedVoltage = kG;
+
+    if(xbox.getAButton()){
+      appliedVoltage = kG + 0.5;
+    }
+
+    wrist.setVoltage(appliedVoltage);
+  }
 
   @Override
   public void simulationInit() {}
