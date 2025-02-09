@@ -11,6 +11,7 @@ import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
@@ -186,11 +187,11 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
     double kG = 0.5;
     double appliedVoltage = kG;
-    //appliedVoltage = (kG * wristEncoder.getPosition()) - kG calculation for wrist
+    // appliedVoltage = (kG * Math.cos(Units.rotationsToRadians(wristEncoder.getAbsPosition()))); - equation for the wrist
 
     if(xbox.getAButton()){
       appliedVoltage = kG + 0.5;
-      // appliedVoltage = (kG * wristEncoder.getPosition()) + 0.5; - this is the equation for the wrist
+      // appliedVoltage = (kG * Math.cos(Units.rotationsToRadians(wristEncoder.getAbsPosition()))) + 0.5; - this is the equation for the wrist
     }
 
     elevator.setVoltage(appliedVoltage);
