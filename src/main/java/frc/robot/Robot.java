@@ -21,18 +21,17 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  SparkMax driveTopRight;
-  SparkMax steerTopRight;
-  SparkMax driveTopLeft;
-  SparkMax steerTopLeft;
-  SparkMax driveBottomRight;
-  SparkMax steerBottomRight;
-  SparkMax driveBottomLeft;
-  SparkMax steerBottomLeft;
-  SparkMax pivot;
+  SparkMax driveFrontRight;
+  SparkMax steerFrontRight;
+  SparkMax driveFrontLeft;
+  SparkMax steerFrontLeft;
+  SparkMax driveBackRight;
+  SparkMax steerBackRight;
+  SparkMax driveBackLeft;
+  SparkMax steerBackLeft;
+  TalonFX pivot;
   SparkMax claw;
   SparkMax climber;
-  SparkMax spare;
   TalonFX elevator;
 
   XboxController xbox;
@@ -40,19 +39,22 @@ public class Robot extends TimedRobot {
   int count;
 
   public Robot() {
-    driveTopRight = new SparkMax(0, MotorType.kBrushless);
-    steerTopRight = new SparkMax(1, MotorType.kBrushless);
-    driveTopLeft = new SparkMax(2, MotorType.kBrushless);
-    steerTopLeft = new SparkMax(3, MotorType.kBrushless);
-    driveBottomRight = new SparkMax(4, MotorType.kBrushless);
-    steerBottomRight = new SparkMax(5, MotorType.kBrushless);
-    driveBottomLeft = new SparkMax(6, MotorType.kBrushless);
-    steerBottomLeft = new SparkMax(7, MotorType.kBrushless);
-    pivot = new SparkMax(8, MotorType.kBrushless);
-    claw = new SparkMax(9, MotorType.kBrushless);
-    climber = new SparkMax(10, MotorType.kBrushless);
-    spare = new SparkMax(11, MotorType.kBrushless);
-    elevator = new TalonFX(12);
+    driveFrontLeft = new SparkMax(1, MotorType.kBrushless);
+    steerFrontLeft = new SparkMax(2, MotorType.kBrushless);
+
+    driveFrontRight = new SparkMax(3, MotorType.kBrushless);
+    steerFrontRight = new SparkMax(4, MotorType.kBrushless);
+
+    driveBackLeft = new SparkMax(5, MotorType.kBrushless);
+    steerBackLeft = new SparkMax(6, MotorType.kBrushless);
+
+    driveBackRight = new SparkMax(7, MotorType.kBrushless);
+    steerBackRight = new SparkMax(8, MotorType.kBrushless);
+
+    pivot = new TalonFX(9);
+    claw = new SparkMax(10, MotorType.kBrushless);
+    climber = new SparkMax(11, MotorType.kBrushless);
+    elevator = new TalonFX(13);
 
     xbox = new XboxController(0);
 
@@ -84,45 +86,45 @@ public class Robot extends TimedRobot {
       count--;
     }
 
-    if (count > 12) {
+    if (count > 11) {
       count = 0;
     } 
 
     if (count < 0) {
-      count = 12;
+      count = 11;
     }
     
     switch (count) {
       case 0:
-      driveTopRight.setVoltage(4);
+      driveFrontRight.setVoltage(4);
       break;
 
       case 1:
-      steerTopRight.setVoltage(4);
+      steerFrontRight.setVoltage(4);
       break;
 
       case 2:
-      driveTopLeft.setVoltage(4);
+      driveFrontLeft.setVoltage(4);
       break;
 
       case 3:
-      steerTopLeft.setVoltage(4);
+      steerFrontLeft.setVoltage(4);
       break;
 
       case 4:
-      driveBottomRight.setVoltage(4);
+      driveBackRight.setVoltage(4);
       break;
 
       case 5:
-      steerBottomRight.setVoltage(4);
+      steerBackRight.setVoltage(4);
       break;
 
       case 6:
-      driveBottomLeft.setVoltage(4);
+      driveBackLeft.setVoltage(4);
       break;
 
       case 7:
-      steerBottomLeft.setVoltage(4);
+      steerBackLeft.setVoltage(4);
       break;
 
       case 8:
@@ -138,10 +140,6 @@ public class Robot extends TimedRobot {
       break;
 
       case 11:
-      spare.setVoltage(4);
-      break;
-
-      case 12:
       elevator.setVoltage(4);
       break;
     } 
@@ -166,18 +164,17 @@ public class Robot extends TimedRobot {
   public void simulationPeriodic() {}
 
   public void stopAllMotors(){
-    driveTopRight.setVoltage(0);
-    steerTopRight.setVoltage(0);
-    driveTopLeft.setVoltage(0);
-    steerTopLeft.setVoltage(0);
-    driveBottomRight.setVoltage(0);
-    steerBottomRight.setVoltage(0);
-    driveBottomLeft.setVoltage(0);
-    steerBottomLeft.setVoltage(0);
+    driveFrontRight.setVoltage(0);
+    steerFrontRight.setVoltage(0);
+    driveFrontLeft.setVoltage(0);
+    steerFrontLeft.setVoltage(0);
+    driveBackRight.setVoltage(0);
+    steerBackRight.setVoltage(0);
+    driveBackLeft.setVoltage(0);
+    steerBackLeft.setVoltage(0);
     pivot.setVoltage(0);
     claw.setVoltage(0);
     climber.setVoltage(0);
-    spare.setVoltage(0);
     elevator.setVoltage(0);
   }
 }
