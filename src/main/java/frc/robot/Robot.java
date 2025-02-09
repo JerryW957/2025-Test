@@ -6,6 +6,7 @@ package frc.robot;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
 import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -39,7 +40,7 @@ public class Robot extends TimedRobot {
   TalonFX elevator;
   Canandmag wristEncoder;
   DigitalInput elevatorLimitSwitch;
-  TimeOfFlight intakeSensor;
+  TimeOfFlight intakeTOF;
 
   XboxController xbox;
   
@@ -70,7 +71,8 @@ public class Robot extends TimedRobot {
 
     wristEncoder = new Canandmag(12);
     elevatorLimitSwitch = new DigitalInput(0);
-    intakeSensor = new TimeOfFlight(1);
+    intakeTOF = new TimeOfFlight(1);
+    intakeTOF.setRangingMode(RangingMode.Short, 20);
 
     // CONTROLLER
     xbox = new XboxController(0);
@@ -85,7 +87,7 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("Wrist Encoder", wristEncoder.getPosition());
     SmartDashboard.putBoolean("Elevator Limit Switch", elevatorLimitSwitch.get());
-    SmartDashboard.putNumber("Intake Sensor", intakeSensor.getRange());
+    SmartDashboard.putNumber("Intake Sensor", intakeTOF.getRange());
     SmartDashboard.putNumber("Elevator Encoder", elevator.getPosition().getValueAsDouble());
   }
 
