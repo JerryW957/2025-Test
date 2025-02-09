@@ -29,8 +29,8 @@ public class Robot extends TimedRobot {
   SparkMax steerBackRight;
   SparkMax driveBackLeft;
   SparkMax steerBackLeft;
-  TalonFX pivot;
-  SparkMax claw;
+  TalonFX wrist;
+  SparkMax intake;
   SparkMax climber;
   TalonFX elevator;
 
@@ -51,8 +51,8 @@ public class Robot extends TimedRobot {
     driveBackRight = new SparkMax(7, MotorType.kBrushless);
     steerBackRight = new SparkMax(8, MotorType.kBrushless);
 
-    pivot = new TalonFX(9);
-    claw = new SparkMax(10, MotorType.kBrushless);
+    wrist = new TalonFX(9);
+    intake = new SparkMax(10, MotorType.kBrushless);
     climber = new SparkMax(11, MotorType.kBrushless);
     elevator = new TalonFX(13);
 
@@ -128,11 +128,11 @@ public class Robot extends TimedRobot {
       break;
 
       case 8:
-      pivot.setVoltage(4);
+      wrist.setVoltage(4);
       break;
 
       case 9:
-      claw.setVoltage(4);
+      intake.setVoltage(4);
       break;
 
       case 10:
@@ -172,8 +172,8 @@ public class Robot extends TimedRobot {
     steerBackRight.setVoltage(0);
     driveBackLeft.setVoltage(0);
     steerBackLeft.setVoltage(0);
-    pivot.setVoltage(0);
-    claw.setVoltage(0);
+    wrist.setVoltage(0);
+    intake.setVoltage(0);
     climber.setVoltage(0);
     elevator.setVoltage(0);
   }
