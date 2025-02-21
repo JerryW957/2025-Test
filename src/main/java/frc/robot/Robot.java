@@ -5,11 +5,17 @@
 package frc.robot;
 
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.spark.SparkMax;
+import com.playingwithfusion.TimeOfFlight;
+import com.playingwithfusion.TimeOfFlight.RangingMode;
+import com.reduxrobotics.sensors.canandmag.Canandmag;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -21,47 +27,70 @@ public class Robot extends TimedRobot {
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
-  SparkMax driveTopRight;
-  SparkMax steerTopRight;
-  SparkMax driveTopLeft;
-  SparkMax steerTopLeft;
-  SparkMax driveBottomRight;
-  SparkMax steerBottomRight;
-  SparkMax driveBottomLeft;
-  SparkMax steerBottomLeft;
-  SparkMax pivot;
-  SparkMax claw;
+  SparkMax driveFrontRight;
+  SparkMax steerFrontRight;
+  SparkMax driveFrontLeft;
+  SparkMax steerFrontLeft;
+  SparkMax driveBackRight;
+  SparkMax steerBackRight;
+  SparkMax driveBackLeft;
+  SparkMax steerBackLeft;
+  TalonFX wrist;
+  SparkMax intake;
   SparkMax climber;
-  SparkMax spare;
   TalonFX elevator;
+  Canandmag wristEncoder;
+  DigitalInput elevatorLimitSwitch;
+  TimeOfFlight intakeTOF;
 
   XboxController xbox;
   
   int count;
 
-  public Robot() {
-    driveTopRight = new SparkMax(0, MotorType.kBrushless);
-    steerTopRight = new SparkMax(1, MotorType.kBrushless);
-    driveTopLeft = new SparkMax(2, MotorType.kBrushless);
-    steerTopLeft = new SparkMax(3, MotorType.kBrushless);
-    driveBottomRight = new SparkMax(4, MotorType.kBrushless);
-    steerBottomRight = new SparkMax(5, MotorType.kBrushless);
-    driveBottomLeft = new SparkMax(6, MotorType.kBrushless);
-    steerBottomLeft = new SparkMax(7, MotorType.kBrushless);
-    pivot = new SparkMax(8, MotorType.kBrushless);
-    claw = new SparkMax(9, MotorType.kBrushless);
-    climber = new SparkMax(10, MotorType.kBrushless);
-    spare = new SparkMax(11, MotorType.kBrushless);
-    elevator = new TalonFX(12);
+  // TELEOP - a case to run each motor individually
+  // TEST - designed to determine kG values
 
+  public Robot() {
+    // DRIVETRAIN MOTORS
+    driveFrontLeft = new SparkMax(1, MotorType.kBrushless);
+    steerFrontLeft = new SparkMax(2, MotorType.kBrushless);
+
+    driveFrontRight = new SparkMax(3, MotorType.kBrushless);
+    steerFrontRight = new SparkMax(4, MotorType.kBrushless);
+
+    driveBackLeft = new SparkMax(5, MotorType.kBrushless);
+    steerBackLeft = new SparkMax(6, MotorType.kBrushless);
+
+    driveBackRight = new SparkMax(7, MotorType.kBrushless);
+    steerBackRight = new SparkMax(8, MotorType.kBrushless);
+
+    // MECHANISM MOTORS
+    wrist = new TalonFX(9);
+    intake = new SparkMax(10, MotorType.kBrushless);
+    climber = new SparkMax(11, MotorType.kBrushless);
+    elevator = new TalonFX(13);
+
+    wristEncoder = new Canandmag(12);
+    elevatorLimitSwitch = new DigitalInput(0);
+    intakeTOF = new TimeOfFlight(1);
+    intakeTOF.setRangingMode(RangingMode.Short, 20);
+
+    // CONTROLLER
     xbox = new XboxController(0);
 
+    // GLOBAL VARIABLES
     count = 0;
 
   }
 
   @Override
-  public void robotPeriodic() {}
+  // Dashboard sensor values
+  public void robotPeriodic() {
+    SmartDashboard.putNumber("Wrist Encoder", wristEncoder.getPosition());
+    SmartDashboard.putBoolean("Elevator Limit Switch", elevatorLimitSwitch.get());
+    SmartDashboard.putNumber("Intake TOF", intakeTOF.getRange());
+    SmartDashboard.putNumber("Elevator Encoder", elevator.getPosition().getValueAsDouble());
+  }
 
   @Override
   public void autonomousInit() {}
@@ -84,53 +113,53 @@ public class Robot extends TimedRobot {
       count--;
     }
 
-    if (count > 12) {
+    if (count > 11) {
       count = 0;
     } 
 
     if (count < 0) {
-      count = 12;
+      count = 11;
     }
     
     switch (count) {
       case 0:
-      driveTopRight.setVoltage(4);
+      driveFrontRight.setVoltage(4);
       break;
 
       case 1:
-      steerTopRight.setVoltage(4);
+      steerFrontRight.setVoltage(4);
       break;
 
       case 2:
-      driveTopLeft.setVoltage(4);
+      driveFrontLeft.setVoltage(4);
       break;
 
       case 3:
-      steerTopLeft.setVoltage(4);
+      steerFrontLeft.setVoltage(4);
       break;
 
       case 4:
-      driveBottomRight.setVoltage(4);
+      driveBackRight.setVoltage(4);
       break;
 
       case 5:
-      steerBottomRight.setVoltage(4);
+      steerBackRight.setVoltage(4);
       break;
 
       case 6:
-      driveBottomLeft.setVoltage(4);
+      driveBackLeft.setVoltage(4);
       break;
 
       case 7:
-      steerBottomLeft.setVoltage(4);
+      steerBackLeft.setVoltage(4);
       break;
 
       case 8:
-      pivot.setVoltage(4);
+      wrist.setVoltage(4);
       break;
 
       case 9:
-      claw.setVoltage(4);
+      intake.setVoltage(4);
       break;
 
       case 10:
@@ -138,10 +167,6 @@ public class Robot extends TimedRobot {
       break;
 
       case 11:
-      spare.setVoltage(4);
-      break;
-
-      case 12:
       elevator.setVoltage(4);
       break;
     } 
@@ -154,10 +179,23 @@ public class Robot extends TimedRobot {
   public void disabledPeriodic() {}
 
   @Override
-  public void testInit() {}
+  public void testInit() {
+
+  }
 
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    double kG = 0.5;
+    double appliedVoltage = kG;
+    // appliedVoltage = (kG * Math.cos(Units.rotationsToRadians(wristEncoder.getAbsPosition()))); - equation for the wrist
+
+    if(xbox.getAButton()){
+      appliedVoltage = kG + 0.5;
+      // appliedVoltage = (kG * Math.cos(Units.rotationsToRadians(wristEncoder.getAbsPosition()))) + 0.5; - this is the equation for the wrist
+    }
+
+    elevator.setVoltage(appliedVoltage);
+  }
 
   @Override
   public void simulationInit() {}
@@ -166,18 +204,17 @@ public class Robot extends TimedRobot {
   public void simulationPeriodic() {}
 
   public void stopAllMotors(){
-    driveTopRight.setVoltage(0);
-    steerTopRight.setVoltage(0);
-    driveTopLeft.setVoltage(0);
-    steerTopLeft.setVoltage(0);
-    driveBottomRight.setVoltage(0);
-    steerBottomRight.setVoltage(0);
-    driveBottomLeft.setVoltage(0);
-    steerBottomLeft.setVoltage(0);
-    pivot.setVoltage(0);
-    claw.setVoltage(0);
+    driveFrontRight.setVoltage(0);
+    steerFrontRight.setVoltage(0);
+    driveFrontLeft.setVoltage(0);
+    steerFrontLeft.setVoltage(0);
+    driveBackRight.setVoltage(0);
+    steerBackRight.setVoltage(0);
+    driveBackLeft.setVoltage(0);
+    steerBackLeft.setVoltage(0);
+    wrist.setVoltage(0);
+    intake.setVoltage(0);
     climber.setVoltage(0);
-    spare.setVoltage(0);
     elevator.setVoltage(0);
   }
 }
